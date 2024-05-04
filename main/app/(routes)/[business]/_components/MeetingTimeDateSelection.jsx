@@ -14,6 +14,8 @@ import { useRouter } from 'next/navigation'
 import Plunk from '@plunk/node'
 import { render } from '@react-email/render';
 import Email from '@/emails'
+
+
 function MeetingTimeDateSelection({eventInfo,businessInfo}) {
     const [date,setDate]=useState(new Date())
     const [timeSlots,setTimeSlots]=useState();
@@ -27,10 +29,12 @@ function MeetingTimeDateSelection({eventInfo,businessInfo}) {
     const router=useRouter();
     const db=getFirestore(app);
     const [loading,setLoading]=useState(false);
+    
     const plunk = new Plunk(process.env.NEXT_PUBLIC_PLUNK_API_KEY);
     useEffect(()=>{
         eventInfo?.duration&&createTimeSlot(eventInfo?.duration)
     },[eventInfo])
+
     const createTimeSlot=(interval)=>{
         const startTime = 8 * 60; // 8 AM in minutes
         const endTime = 22 * 60; // 10 PM in minutes
