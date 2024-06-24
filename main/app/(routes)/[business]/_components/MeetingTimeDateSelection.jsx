@@ -65,11 +65,6 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
   };
 
   const handleScheduleEvent = async () => {
-    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    if (!regex.test(userEmail)) {
-      toast('Enter valid email address');
-      return;
-    }
     const docId = Date.now().toString();
     setLoading(true);
     await setDoc(doc(db, 'ScheduledMeetings', docId), {
@@ -88,32 +83,9 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
       userNote: userNote
     }).then(resp => {
       toast('Meeting Scheduled successfully!');
-      sendEmail(userName);
-    }).catch(error => {
-      toast('Failed to schedule meeting');
-      setLoading(false);
-    });
-  };
-
-  const sendEmail = (user) => {
-    const emailHtml = render(<Email
-      businessName={businessInfo?.businessName}
-      date={format(date, 'PPP').toString()}
-      duration={eventInfo?.duration}
-      meetingTime={selectedTime}
-      meetingUrl={eventInfo.locationUrl}
-      userFirstName={user}
-    />);
-
-    plunk.emails.send({
-      to: userEmail,
-      subject: "Meeting Schedule Details",
-      body: emailHtml,
-    }).then(resp => {
-      setLoading(false);
       router.replace('/confirmation');
     }).catch(error => {
-      toast('Failed to send email');
+      toast('Failed to schedule meeting');
       setLoading(false);
     });
   };
@@ -133,11 +105,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (step === 1) {
-      setStep(2);
-    } else {
-      handleScheduleEvent();
-    }
+    handleScheduleEvent();
   };
 
   return (
@@ -158,16 +126,16 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
           </div>
         </div>
         
-          <TimeDateSelection
-            date={date}
-            enableTimeSlot={enableTimeSlot}
-            handleDateChange={handleDateChange}
-            setSelectedTime={setSelectedTime}
-            timeSlots={timeSlots}
-            selectedTime={selectedTime}
-            prevBooking={prevBooking}
-          />
-        
+        <TimeDateSelection
+          date={date}
+          enableTimeSlot={enableTimeSlot}
+          handleDateChange={handleDateChange}
+          setSelectedTime={setSelectedTime}
+          timeSlots={timeSlots}
+          selectedTime={selectedTime}
+          prevBooking={prevBooking}
+        />
+
         <div className='col-span-3 p-4 mt-5 flex justify-end'>
           <Button onClick={handleSubmit} loading={loading} disabled={!enableTimeSlot}>
              Schedule Meeting
