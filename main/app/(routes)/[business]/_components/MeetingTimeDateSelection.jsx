@@ -49,6 +49,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
       return `${String(formattedHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')} ${period}`;
     });
 
+    console.log('Time Slots:', slots); // Debugging log
     setTimeSlots(slots);
   };
 
@@ -130,6 +131,15 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
     setPrevBooking(bookings);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (step === 1) {
+      setStep(2);
+    } else {
+      handleScheduleEvent();
+    }
+  };
+
   return (
     <div className='p-5 py-10 shadow-lg m-5 border-t-8 mx-10 md:mx-26 lg:mx-56 my-10' style={{ borderTopColor: eventInfo?.themeColor }}>
       <Image src='/Logo.png' alt='logo' width={150} height={150} />
@@ -157,39 +167,21 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
             selectedTime={selectedTime}
             prevBooking={prevBooking}
           />
-        ) : (          <UserFormInfo
-          setUserName={setUserName}
-          setUserEmail={setUserEmail}
-          setUserNote={setUserNote}
-        />
-      )}
+        ) : (
+          <UserFormInfo
+            setUserName={setUserName}
+            setUserEmail={setUserEmail}
+            setUserNote={setUserNote}
+          />
+        )}
+        <div className='col-span-3 p-4 mt-5 flex justify-end'>
+          <Button onClick={handleSubmit} loading={loading} disabled={!enableTimeSlot && step === 1}>
+            {step === 1 ? 'Next Step' : 'Schedule Meeting'}
+          </Button>
+        </div>
+      </div>
     </div>
-    <div className='flex gap-3 justify-end'>
-      {step === 2 && (
-        <Button variant="outline" onClick={() => setStep(1)}>
-          Back
-        </Button>
-      )}
-      {step === 1 ? (
-        <Button
-          className="mt-10 float-right"
-          disabled={!selectedTime || !date}
-          onClick={() => setStep(step + 1)}
-        >
-          Next
-        </Button>
-      ) : (
-        <Button
-          disabled={!userEmail || !userName}
-          onClick={handleScheduleEvent}
-        >
-          {loading ? <LoaderIcon className='animate-spin' /> : 'Schedule'}
-        </Button>
-      )}
-    </div>
-  </div>
-);
+  );
 }
 
 export default MeetingTimeDateSelection;
-
