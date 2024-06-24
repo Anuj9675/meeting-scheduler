@@ -157,7 +157,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
             </Link>
           </div>
         </div>
-        {step === 1 ? (
+        
           <TimeDateSelection
             date={date}
             enableTimeSlot={enableTimeSlot}
@@ -167,13 +167,8 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
             selectedTime={selectedTime}
             prevBooking={prevBooking}
           />
-        ) : (
-          <UserFormInfo
-            setUserName={setUserName}
-            setUserEmail={setUserEmail}
-            setUserNote={setUserNote}
-          />
-        )}
+    
+          
         <div className='col-span-3 p-4 mt-5 flex justify-end'>
           <Button onClick={handleSubmit} loading={loading} disabled={!enableTimeSlot && step === 1}>
             {step === 1 ? 'Next Step' : 'Schedule Meeting'}
