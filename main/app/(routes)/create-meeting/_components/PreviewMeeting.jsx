@@ -36,7 +36,7 @@ function PreviewMeeting({formValue}) {
     <div className='p-5 py-10 shadow-lg m-5 border-t-8'
     style={{borderTopColor:formValue?.themeColor}}
     >
-       <Image src='/Logo.png' alt='logo'
+       <Image src='/logo.svg' alt='logo'
        width={150}
        height={150}/>
        <div className='grid grid-cols-1 md:grid-cols-3 mt-5'>
