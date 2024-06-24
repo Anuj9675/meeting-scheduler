@@ -17,11 +17,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
   const [timeSlots, setTimeSlots] = useState([]);
   const [enableTimeSlot, setEnabledTimeSlot] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
-  const [userName, setUserName] = useState('');
-  const [userEmail, setUserEmail] = useState('');
-  const [userNote, setUserNote] = useState('');
   const [prevBooking, setPrevBooking] = useState([]);
-  const [step, setStep] = useState(1);
   const router = useRouter(); // Initialize useRouter
   const db = getFirestore(app);
   const [loading, setLoading] = useState(false);
