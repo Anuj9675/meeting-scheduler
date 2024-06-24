@@ -1,7 +1,7 @@
-'use client'
+'use client';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
-import { CalendarCheck, Clock, LoaderIcon, MapPin, Timer } from 'lucide-react';
+import { CalendarCheck, Clock, MapPin, Timer } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -12,14 +12,13 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import Plunk from '@plunk/node';
 
-
 function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
   const [date, setDate] = useState(new Date());
   const [timeSlots, setTimeSlots] = useState([]);
   const [enableTimeSlot, setEnabledTimeSlot] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
   const [prevBooking, setPrevBooking] = useState([]);
-  const router = useRouter(); 
+  const router = useRouter();
   const db = getFirestore(app);
   const [loading, setLoading] = useState(false);
   const plunk = new Plunk(process.env.NEXT_PUBLIC_PLUNK_API_KEY);
@@ -61,28 +60,30 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
   const handleScheduleEvent = async () => {
     const docId = Date.now().toString();
     setLoading(true);
-    await setDoc(doc(db, 'ScheduledMeetings', docId), {
-      businessName: businessInfo.businessName,
-      businessEmail: businessInfo.email,
-      selectedTime: selectedTime,
-      selectedDate: date,
-      formatedDate: format(date, 'PPP'),
-      formatedTimeStamp: format(date, 't'),
-      duration: eventInfo.duration,
-      locationUrl: eventInfo.locationUrl,
-      eventId: eventInfo.id,
-      id: docId,
-      userName: userName,
-      userEmail: userEmail,
-      userNote: userNote
-    }).then(resp => {
+    try {
+      await setDoc(doc(db, 'ScheduledMeetings', docId), {
+        businessName: businessInfo.businessName,
+        businessEmail: businessInfo.email,
+        selectedTime: selectedTime,
+        selectedDate: date,
+        formatedDate: format(date, 'PPP'),
+        formatedTimeStamp: format(date, 't'),
+        duration: eventInfo.duration,
+        locationUrl: eventInfo.locationUrl,
+        eventId: eventInfo.id,
+        id: docId,
+        userName: userName, // Ensure userName, userEmail, userNote are properly defined
+        userEmail: userEmail,
+        userNote: userNote
+      });
       toast('Meeting Scheduled successfully!');
       setLoading(false);
-      router.push('/dashboard/meeting-type'); // Redirect to dashboard/meetingtype
-    }).catch(error => {
+      router.push('/dashboard/meeting-type'); // Redirect to dashboard/meeting-type
+    } catch (error) {
+      console.error('Failed to schedule meeting', error);
       toast('Failed to schedule meeting');
       setLoading(false);
-    });
+    }
   };
 
   const getPrevEventBooking = async (date_) => {
@@ -120,7 +121,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
             </Link>
           </div>
         </div>
-        
+
         <TimeDateSelection
           date={date}
           enableTimeSlot={enableTimeSlot}
