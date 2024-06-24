@@ -1,4 +1,4 @@
-"use Client"
+"use client"
 import { Button } from '@/components/ui/button'
 import { Briefcase, Calendar, Clock, Plus, Settings } from 'lucide-react'
 import Image from 'next/image'
