@@ -169,7 +169,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
           />
         
         <div className='col-span-3 p-4 mt-5 flex justify-end'>
-          <Button onClick={handleSubmit} loading={loading} disabled={!enableTimeSlot && step === 1}>
+          <Button onClick={handleSubmit} loading={loading} disabled={!enableTimeSlot}>
              Schedule Meeting
           </Button>
         </div>
