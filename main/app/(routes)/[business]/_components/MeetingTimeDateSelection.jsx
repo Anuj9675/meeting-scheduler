@@ -164,7 +164,7 @@ function MeetingTimeDateSelection({eventInfo,businessInfo}) {
                     <h2 className='flex gap-2'><Clock/>{eventInfo?.duration} Min </h2>
                     <h2 className='flex gap-2'><MapPin/>{eventInfo?.locationType} Meeting </h2>
                     <h2 className='flex gap-2'><CalendarCheck/>{format(date,'PPP')}  </h2>
-                  {selectedTime&&  <h2 className='flex gap-2'><Timer/>{selectedTime}  </h2>}
+                  <h2 className='flex gap-2'><Timer/>{selectedTime}  </h2>
                   
                     <Link href={eventInfo?.locationUrl?eventInfo?.locationUrl:'#'}
                     className='text-primary'
