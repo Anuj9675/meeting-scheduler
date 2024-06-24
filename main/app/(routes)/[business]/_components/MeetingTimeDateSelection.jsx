@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
@@ -26,9 +26,10 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
   const [userNote, setUserNote] = useState('');
   const [prevBooking, setPrevBooking] = useState([]);
   const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [showThankYou, setShowThankYou] = useState(false); // State for thank you message
   const router = useRouter(); // Initialize useRouter
   const db = getFirestore(app);
-  const [loading, setLoading] = useState(false);
   const plunk = new Plunk(process.env.NEXT_PUBLIC_PLUNK_API_KEY);
 
   useEffect(() => {
@@ -68,28 +69,30 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
   const handleScheduleEvent = async () => {
     const docId = Date.now().toString();
     setLoading(true);
-    await setDoc(doc(db, 'ScheduledMeetings', docId), {
-      businessName: businessInfo.businessName,
-      businessEmail: businessInfo.email,
-      selectedTime: selectedTime,
-      selectedDate: date,
-      formatedDate: format(date, 'PPP'),
-      formatedTimeStamp: format(date, 't'),
-      duration: eventInfo.duration,
-      locationUrl: eventInfo.locationUrl,
-      eventId: eventInfo.id,
-      id: docId,
-      userName: userName,
-      userEmail: userEmail,
-      userNote: userNote
-    }).then(resp => {
+    try {
+      await setDoc(doc(db, 'ScheduledMeetings', docId), {
+        businessName: businessInfo.businessName,
+        businessEmail: businessInfo.email,
+        selectedTime: selectedTime,
+        selectedDate: date,
+        formatedDate: format(date, 'PPP'),
+        formatedTimeStamp: format(date, 't'),
+        duration: eventInfo.duration,
+        locationUrl: eventInfo.locationUrl,
+        eventId: eventInfo.id,
+        id: docId,
+        userName: userName,
+        userEmail: userEmail,
+        userNote: userNote
+      });
       toast('Meeting Scheduled successfully!');
       setLoading(false);
-      router.push('/dashboard/meeting-type'); // Redirect to dashboard/meetingtype
-    }).catch(error => {
+      setShowThankYou(true); // Show thank you message
+    } catch (error) {
+      console.error('Failed to schedule meeting', error);
       toast('Failed to schedule meeting');
       setLoading(false);
-    });
+    }
   };
 
   const getPrevEventBooking = async (date_) => {
@@ -110,39 +113,54 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
     handleScheduleEvent();
   };
 
+  const handleBack = () => {
+    setShowThankYou(false); // Hide thank you message
+  };
+
   return (
     <div className='p-5 py-10 shadow-lg m-5 border-t-8 mx-10 md:mx-26 lg:mx-56 my-10' style={{ borderTopColor: eventInfo?.themeColor }}>
       <Image src='/Logo.png' alt='logo' width={150} height={150} />
       <div className='grid grid-cols-1 md:grid-cols-3 mt-5'>
-        <div className='p-4 border-r'>
-          <h2>{businessInfo?.businessName}</h2>
-          <h2 className='font-bold text-3xl'>{eventInfo?.eventName ? eventInfo?.eventName : 'Meeting Name'}</h2>
-          <div className='mt-5 flex flex-col gap-4'>
-            <h2 className='flex gap-2'><Clock />{eventInfo?.duration} Min</h2>
-            <h2 className='flex gap-2'><MapPin />{eventInfo?.locationType} Meeting</h2>
-            <h2 className='flex gap-2'><CalendarCheck />{format(date, 'PPP')}</h2>
-            {selectedTime && <h2 className='flex gap-2'><Timer />{selectedTime}</h2>}
-            <Link href={eventInfo?.locationUrl ? eventInfo?.locationUrl : '#'} className='text-primary'>
-              {eventInfo?.locationUrl}
-            </Link>
+        {showThankYou ? (
+          <div className='col-span-3 p-4 text-center'>
+            <h2 className='text-3xl font-bold'>Thank you for scheduling!</h2>
+            <Button onClick={handleBack} className='mt-4'>
+              Back
+            </Button>
           </div>
-        </div>
-        
-        <TimeDateSelection
-          date={date}
-          enableTimeSlot={enableTimeSlot}
-          handleDateChange={handleDateChange}
-          setSelectedTime={setSelectedTime}
-          timeSlots={timeSlots}
-          selectedTime={selectedTime}
-          prevBooking={prevBooking}
-        />
+        ) : (
+          <>
+            <div className='p-4 border-r'>
+              <h2>{businessInfo?.businessName}</h2>
+              <h2 className='font-bold text-3xl'>{eventInfo?.eventName ? eventInfo?.eventName : 'Meeting Name'}</h2>
+              <div className='mt-5 flex flex-col gap-4'>
+                <h2 className='flex gap-2'><Clock />{eventInfo?.duration} Min</h2>
+                <h2 className='flex gap-2'><MapPin />{eventInfo?.locationType} Meeting</h2>
+                <h2 className='flex gap-2'><CalendarCheck />{format(date, 'PPP')}</h2>
+                {selectedTime && <h2 className='flex gap-2'><Timer />{selectedTime}</h2>}
+                <Link href={eventInfo?.locationUrl ? eventInfo?.locationUrl : '#'} className='text-primary'>
+                  {eventInfo?.locationUrl}
+                </Link>
+              </div>
+            </div>
+            
+            <TimeDateSelection
+              date={date}
+              enableTimeSlot={enableTimeSlot}
+              handleDateChange={handleDateChange}
+              setSelectedTime={setSelectedTime}
+              timeSlots={timeSlots}
+              selectedTime={selectedTime}
+              prevBooking={prevBooking}
+            />
 
-        <div className='col-span-3 p-4 mt-5 flex justify-end'>
-          <Button onClick={handleSubmit} loading={loading} disabled={!enableTimeSlot}>
-             Schedule Meeting
-          </Button>
-        </div>
+            <div className='col-span-3 p-4 mt-5 flex justify-end'>
+              <Button onClick={handleSubmit} loading={loading} disabled={!enableTimeSlot}>
+                 Schedule Meeting
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
