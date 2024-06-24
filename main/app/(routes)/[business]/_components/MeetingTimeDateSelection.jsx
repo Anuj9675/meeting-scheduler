@@ -1,19 +1,16 @@
 'use client'
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { CalendarCheck, Clock, LoaderIcon, MapPin, Timer } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import TimeDateSelection from './TimeDateSelection';
-import UserFormInfo from './UserFormInfo';
 import { collection, doc, getDocs, getFirestore, query, setDoc, where } from 'firebase/firestore';
 import { app } from '@/config/FirebaseConfig';
 import { toast } from 'sonner';
 import Plunk from '@plunk/node';
-import { render } from '@react-email/render';
-import Email from '@/emails';
+
 
 function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
   const [date, setDate] = useState(new Date());
