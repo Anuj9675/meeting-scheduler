@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import { LogoutLink } from '@kinde-oss/kinde-auth-nextjs'
 
 function SideNavBar() {
     const menu=[
@@ -16,18 +17,12 @@ function SideNavBar() {
         },
         {
             id:2,
-            name:'Scheduled Meeting',
-            path:'/dashboard/scheduled-meeting',
-            icon:Calendar
-        },
-        {
-            id:3,
             name:'Availability',
             path:'/dashboard/availability',
             icon:Clock
         },
         {
-            id:4,
+            id:3,
             name:'Settings',
             path:'/dashboard/settings',
             icon:Settings
@@ -71,6 +66,7 @@ function SideNavBar() {
                         </Button>
                     </Link>
                 ))}
+                <LogoutLink>Logout</LogoutLink>
             </div>
         </div>
     )
