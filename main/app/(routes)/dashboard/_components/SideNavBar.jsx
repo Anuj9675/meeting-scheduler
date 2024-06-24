@@ -66,7 +66,7 @@ function SideNavBar() {
                         </Button>
                     </Link>
                 ))}
-                <LogoutLink>Logout</LogoutLink>
+                <LogoutLink className='border border-1 rounded-md p-4 hover:bg-red-500 m-2'>Logout</LogoutLink>
             </div>
         </div>
     )
