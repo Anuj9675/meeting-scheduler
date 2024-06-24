@@ -150,7 +150,7 @@ function MeetingTimeDateSelection({eventInfo,businessInfo}) {
     my-10'
     style={{borderTopColor:eventInfo?.themeColor}}
     >
-       <Image src='/Logo.png' alt='logo'
+       <Image src='/logo.svg' alt='logo'
        width={150}
        height={150}/>
        <div className='grid grid-cols-1 md:grid-cols-3 mt-5'>
@@ -164,7 +164,7 @@ function MeetingTimeDateSelection({eventInfo,businessInfo}) {
                     <h2 className='flex gap-2'><Clock/>{eventInfo?.duration} Min </h2>
                     <h2 className='flex gap-2'><MapPin/>{eventInfo?.locationType} Meeting </h2>
                     <h2 className='flex gap-2'><CalendarCheck/>{format(date,'PPP')}  </h2>
-                  {selectedTime&&  <h2 className='flex gap-2'><Timer/> </h2>}
+                  {selectedTime&&  <h2 className='flex gap-2'><Timer/>{selectedTime}  </h2>}
                   
                     <Link href={eventInfo?.locationUrl?eventInfo?.locationUrl:'#'}
                     className='text-primary'
