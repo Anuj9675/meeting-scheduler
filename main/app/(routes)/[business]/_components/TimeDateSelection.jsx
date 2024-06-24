@@ -28,7 +28,7 @@ function TimeDateSelection({date,handleDateChange,timeSlots,setSelectedTime,enab
     <div className='flex flex-col w-full overflow-auto gap-4 p-5'
     style={{maxHeight:'400px'}}
     >
-        {timeSlots?.map((time)=>(
+        {timeSlots?.map((time,index)=>(
             <Button
             disabled={!enableTimeSlot||checkTimeSlot(time)}
             onClick={()=>setSelectedTime(time)}

@@ -15,6 +15,7 @@ import {
 import * as React from "react";
 
 
+const baseUrl = '';
 
 export const Email = ({
   userFirstName,
@@ -29,7 +30,7 @@ export const Email = ({
   return (
     <Html>
       <Head />
-      <Preview>Recently login</Preview>
+      <Preview>Octa recent login</Preview>
       <Body style={main}>
         <Container>
           <Section style={logo}>
@@ -41,7 +42,7 @@ export const Email = ({
               <Img
                 style={image}
                 width={620}
-                src={''}
+                src={'https://plus.unsplash.com/premium_photo-1682309526815-efe5d6225117?q=80&w=1824&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}
               />
             </Row>
 
@@ -64,9 +65,9 @@ export const Email = ({
                     textAlign: "center",
                   }}
                 >
-                  Thank you for scheduling Meeting with {businessName},
+                 Thank you for scheduling Meeting with {businessName},
                 </Heading>
-                <Text>Please find the meeting details:</Text>
+                  <Text>Please find the meeting details:</Text>
                 <Text style={paragraph}>
                   <b>Time: </b>
                   {meetingTime}
@@ -94,7 +95,7 @@ export const Email = ({
                   {meetingUrl}
                 </Text>
 
-
+              
               </Column>
             </Row>
             <Row style={{ ...boxInfos, paddingTop: "0" }}>
@@ -108,7 +109,7 @@ export const Email = ({
             <Img
               style={image}
               width={620}
-              src={''}
+              src={'https://plus.unsplash.com/premium_photo-1682309526815-efe5d6225117?q=80&w=1824&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}
             />
           </Section>
 
@@ -119,7 +120,7 @@ export const Email = ({
               color: "rgb(0,0,0, 0.7)",
             }}
           >
-            @2024 All rights to Octa
+            © 2024 | Octa
           </Text>
         </Container>
       </Body>
