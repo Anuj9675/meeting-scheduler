@@ -1,4 +1,3 @@
-'use client'
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
@@ -11,7 +10,7 @@ import UserFormInfo from './UserFormInfo';
 import { collection, doc, getDocs, getFirestore, query, setDoc, where } from 'firebase/firestore';
 import { app } from '@/config/FirebaseConfig';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router'; // Import useRouter from next/router
 import Plunk from '@plunk/node';
 import { render } from '@react-email/render';
 import Email from '@/emails';
@@ -26,7 +25,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
   const [userNote, setUserNote] = useState('');
   const [prevBooking, setPrevBooking] = useState([]);
   const [step, setStep] = useState(1);
-  const router = useRouter();
+  const router = useRouter(); // Initialize useRouter
   const db = getFirestore(app);
   const [loading, setLoading] = useState(false);
   const plunk = new Plunk(process.env.NEXT_PUBLIC_PLUNK_API_KEY);
@@ -84,7 +83,8 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
       userNote: userNote
     }).then(resp => {
       toast('Meeting Scheduled successfully!');
-      router.replace('/confirmation');
+      setLoading(false);
+      router.push('/dashboard/meeting-type'); // Redirect to dashboard/meetingtype
     }).catch(error => {
       toast('Failed to schedule meeting');
       setLoading(false);
