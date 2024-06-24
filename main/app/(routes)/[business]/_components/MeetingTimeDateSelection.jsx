@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react';
 import TimeDateSelection from './TimeDateSelection';
 import { collection, doc, getDocs, getFirestore, query, setDoc, where } from 'firebase/firestore';
 import { app } from '@/config/FirebaseConfig';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import Plunk from '@plunk/node';
 
@@ -18,7 +19,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
   const [enableTimeSlot, setEnabledTimeSlot] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
   const [prevBooking, setPrevBooking] = useState([]);
-  const router = useRouter(); // Initialize useRouter
+  const router = useRouter(); 
   const db = getFirestore(app);
   const [loading, setLoading] = useState(false);
   const plunk = new Plunk(process.env.NEXT_PUBLIC_PLUNK_API_KEY);
