@@ -15,6 +15,7 @@ function SideNavBar() {
             path:'/dashboard/meeting-type',
             icon:Briefcase
         },
+
         {
             id:2,
             name:'Availability',
