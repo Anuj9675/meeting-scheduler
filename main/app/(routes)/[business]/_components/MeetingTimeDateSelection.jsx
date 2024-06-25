@@ -100,10 +100,13 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
         }).then(resp => {
             toast('Meeting Scheduled successfully!');
             sendEmail(userName);
+        }).catch(error => {
+            console.error("Error scheduling meeting: ", error);
+            setLoading(false);
         });
     };
 
-    const sendEmail = (user) => {
+    const sendEmail = async (user) => {
         const emailHtml = render(<Email
             businessName={businessInfo?.businessName}
             date={format(date, 'PPP').toString()}
@@ -113,15 +116,20 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
             userFirstName={user}
         />);
 
-        plunk.emails.send({
-            to: userEmail,
-            subject: "Meeting Schedule Details",
-            body: emailHtml,
-        }).then(resp => {
-            console.log(resp);
+        try {
+            const response = await plunk.emails.send({
+                to: userEmail,
+                subject: "Meeting Schedule Details",
+                body: emailHtml,
+            });
+            console.log("Email sent successfully:", response);
             setLoading(false);
             router.replace('/confirmation');
-        });
+        } catch (error) {
+            console.error("Error sending email: ", error);
+            toast('Failed to send email notification');
+            setLoading(false);
+        }
     };
 
     const getPrevEventBooking = async (date_) => {
@@ -154,7 +162,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
         my-10'
             style={{ borderTopColor: eventInfo?.themeColor }}
         >
-            <Image src='/Logo.png' alt='logo'
+            <Image src='/logo.svg' alt='logo'
                 width={150}
                 height={150} />
             <div className='grid grid-cols-1 md:grid-cols-3 mt-5'>
@@ -193,9 +201,9 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
                     <Button className="mt-10 float-right"
                         disabled={!selectedTime || !date}
                         onClick={() => setStep(step + 1)}
-                    >Next</Button> :
-                    <Button disabled={!userEmail || !userName}
-                        onClick={handleScheduleEvent}>
+                    >Next
+                    </Button> :
+                    <Button disabled={!userEmail || !userName} onClick={handleScheduleEvent}>
                         {loading ? <LoaderIcon className='animate-spin' /> : 'Schedule'}
                     </Button>}
             </div>
