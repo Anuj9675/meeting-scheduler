@@ -66,12 +66,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
 
     const handleDateChange = (date) => {
         setDate(date);
-        const day = format(date, 'EEEE');
-        if (businessInfo?.daysAvailable?.[day]) {
-            setEnabledTimeSlot(true);
-        } else {
-            setEnabledTimeSlot(false);
-        }
+        setEnabledTimeSlot(true);
     };
 
     const handleScheduleEvent = async () => {
@@ -153,6 +148,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
         console.log('Available time slots:', filteredSlots);
         setAvailableTimeSlots(filteredSlots);
     };
+
 
     return (
         <div className='p-5 py-10 shadow-lg m-5 border-t-8
