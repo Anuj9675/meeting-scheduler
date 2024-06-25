@@ -18,6 +18,7 @@ import Email from '@/emails';
 function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
     const [date, setDate] = useState(new Date());
     const [timeSlots, setTimeSlots] = useState([]);
+    const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
     const [enableTimeSlot, setEnabledTimeSlot] = useState(false);
     const [selectedTime, setSelectedTime] = useState();
     const [userName, setUserName] = useState();
@@ -31,8 +32,20 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
     const plunk = new Plunk(process.env.NEXT_PUBLIC_PLUNK_API_KEY);
 
     useEffect(() => {
-        eventInfo?.duration && createTimeSlot(eventInfo?.duration);
+        if (eventInfo?.duration) {
+            createTimeSlot(eventInfo.duration);
+        }
     }, [eventInfo]);
+
+    useEffect(() => {
+        if (date && enableTimeSlot) {
+            getPrevEventBooking(date);
+        }
+    }, [date]);
+
+    useEffect(() => {
+        filterAvailableTimeSlots();
+    }, [timeSlots, prevBooking]);
 
     const createTimeSlot = (interval) => {
         const startTime = 8 * 60; // 8 AM in minutes
@@ -47,6 +60,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
             return `${String(formattedHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')} ${period}`;
         });
 
+        console.log('Created time slots:', slots);
         setTimeSlots(slots);
     };
 
@@ -54,7 +68,6 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
         setDate(date);
         const day = format(date, 'EEEE');
         if (businessInfo?.daysAvailable?.[day]) {
-            getPrevEventBooking(date);
             setEnabledTimeSlot(true);
         } else {
             setEnabledTimeSlot(false);
@@ -113,7 +126,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
 
     const getPrevEventBooking = async (date_) => {
         const q = query(collection(db, 'ScheduledMeetings'),
-            where('selectedDate', '==', date_),
+            where('selectedDate', '==', format(date_, 'yyyy-MM-dd')),
             where('eventId', '==', eventInfo.id));
 
         const querySnapshot = await getDocs(q);
@@ -123,10 +136,15 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
             bookedSlots.push(doc.data().selectedTime);
         });
 
+        console.log('Previous bookings:', bookedSlots);
         setPrevBooking(bookedSlots);
     };
 
-    const availableTimeSlots = timeSlots.filter(slot => !prevBooking.includes(slot));
+    const filterAvailableTimeSlots = () => {
+        const filteredSlots = timeSlots.filter(slot => !prevBooking.includes(slot));
+        console.log('Available time slots:', filteredSlots);
+        setAvailableTimeSlots(filteredSlots);
+    };
 
     return (
         <div className='p-5 py-10 shadow-lg m-5 border-t-8
@@ -136,7 +154,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
         my-10'
             style={{ borderTopColor: eventInfo?.themeColor }}
         >
-            <Image src='/Logo.png' alt='logo'
+            <Image src='/logo.svg' alt='logo'
                 width={150}
                 height={150} />
             <div className='grid grid-cols-1 md:grid-cols-3 mt-5'>
