@@ -34,7 +34,7 @@ export const Email = ({
       <Body style={main}>
         <Container>
           <Section style={logo}>
-            <Img src={''} />
+            <Img src={'Logo.png'} />
           </Section>
 
           <Section style={content}>
