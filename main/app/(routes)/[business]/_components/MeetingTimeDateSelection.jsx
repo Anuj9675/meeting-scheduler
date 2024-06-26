@@ -33,9 +33,9 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
 
     useEffect(() => {
         if (eventInfo?.duration) {
-            createTimeSlot(eventInfo.duration, date);
+            createTimeSlot(eventInfo.duration);
         }
-    }, [eventInfo, date]);
+    }, [eventInfo]);
 
     useEffect(() => {
         if (date && enableTimeSlot) {
@@ -47,21 +47,12 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
         filterAvailableTimeSlots();
     }, [timeSlots, prevBooking]);
 
-    const createTimeSlot = (interval, selectedDate) => {
+    const createTimeSlot = (interval) => {
         const startTime = 8 * 60; // 8 AM in minutes
         const endTime = 22 * 60; // 10 PM in minutes
-        const now = new Date();
-        let startMinutes = startTime;
-
-        if (format(selectedDate, 'yyyy-MM-dd') === format(now, 'yyyy-MM-dd')) {
-            // If today, start from the next available interval
-            const currentMinutes = now.getHours() * 60 + now.getMinutes();
-            startMinutes = Math.max(startTime, Math.ceil(currentMinutes / interval) * interval);
-        }
-
-        const totalSlots = (endTime - startMinutes) / interval;
+        const totalSlots = (endTime - startTime) / interval;
         const slots = Array.from({ length: totalSlots }, (_, i) => {
-            const totalMinutes = startMinutes + i * interval;
+            const totalMinutes = startTime + i * interval;
             const hours = Math.floor(totalMinutes / 60);
             const minutes = totalMinutes % 60;
             const formattedHours = hours > 12 ? hours - 12 : hours; // Convert to 12-hour format
@@ -76,7 +67,6 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
     const handleDateChange = (date) => {
         setDate(date);
         setEnabledTimeSlot(true);
-        createTimeSlot(eventInfo.duration, date);
     };
 
     const handleScheduleEvent = async () => {
@@ -159,6 +149,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
         setAvailableTimeSlots(filteredSlots);
     };
 
+
     return (
         <div className='p-5 py-10 shadow-lg m-5 border-t-8
         mx-10
@@ -217,4 +208,3 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
 }
 
 export default MeetingTimeDateSelection;
-``
