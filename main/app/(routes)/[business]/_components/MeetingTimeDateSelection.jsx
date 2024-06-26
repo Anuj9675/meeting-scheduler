@@ -52,13 +52,13 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
         const endTime = 22 * 60; // 10 PM in minutes
         const now = new Date();
         let startMinutes = startTime;
-
+    
         if (format(selectedDate, 'yyyy-MM-dd') === format(now, 'yyyy-MM-dd')) {
             // If today, start from the next available interval
             const currentMinutes = now.getHours() * 60 + now.getMinutes();
             startMinutes = Math.max(startTime, Math.ceil(currentMinutes / interval) * interval);
         }
-
+    
         const totalSlots = (endTime - startMinutes) / interval;
         const slots = Array.from({ length: totalSlots }, (_, i) => {
             const totalMinutes = startMinutes + i * interval;
@@ -68,10 +68,11 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
             const period = hours >= 12 ? 'PM' : 'AM';
             return `${String(formattedHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')} ${period}`;
         });
-
+    
         console.log('Created time slots:', slots);
         setTimeSlots(slots);
     };
+    
 
     const handleDateChange = (date) => {
         setDate(date);
