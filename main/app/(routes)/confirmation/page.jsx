@@ -4,20 +4,16 @@ import Link from 'next/link'
 import React from 'react'
 
 function Confirmation() {
-  const handleCloseWindow = () => {
-    window.close(); // Attempt to close the window
-  };
-
   return (
-    <div className='flex flex-col items-center justify-center gap-6 p-20'>
-      <CheckCircle className='h-9 w-9 text-green-500'/>
-      <h2 className='font-bold text-3xl'>Your meeting scheduled successfully!</h2>
-      <h2 className='text-lg text-gray-500'>Confirmation sent to your email</h2>
-      <Link href={'/'}>
-        <Button onClick={handleCloseWindow}>Thank you</Button>
-      </Link>
+    <div className='flex flex-col items-center justify-center gap-6
+    p-20'>
+        <CheckCircle className='h-9 w-9 text-green-500'/>
+        <h2 className='font-bold text-3xl'>Your meeting scheduled successfully!</h2>
+        <h2 className='text-lg text-gray-500'>Confirmation sent on your email</h2>
+        <Link href={'/'}><Button>Thank you</Button></Link> 
+
     </div>
-  );
+  )
 }
 
-export default Confirmation;
+export default Confirmation
