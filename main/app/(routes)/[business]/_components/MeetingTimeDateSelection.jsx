@@ -54,9 +54,9 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
         let startMinutes = startTime;
     
         if (format(selectedDate, 'yyyy-MM-dd') === format(now, 'yyyy-MM-dd')) {
-            // If today, start from the next available interval
+            // If today, start from the current time
             const currentMinutes = now.getHours() * 60 + now.getMinutes();
-            startMinutes = Math.max(startTime, Math.ceil(currentMinutes / interval) * interval);
+            startMinutes = Math.max(startTime, currentMinutes);
         }
     
         const totalSlots = (endTime - startMinutes) / interval;
@@ -72,6 +72,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
         console.log('Created time slots:', slots);
         setTimeSlots(slots);
     };
+    
     
 
     const handleDateChange = (date) => {
