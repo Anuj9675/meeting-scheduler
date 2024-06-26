@@ -48,16 +48,16 @@ function MeetingEventList() {
       })
     }
 
-    const onCopyClickHandler=(event)=>{
+    const onOpenClickHandler=(event)=>{
         const meetingEventUrl=process.env.NEXT_PUBLIC_BASE_URL+'/'+businessInfo.businessName+'/'+event.id
-        navigator.clipboard.writeText(meetingEventUrl);
-        toast('Copied to Clicpboard')
+        window.open(meetingEventUrl, '_blank');
     }
+
     return (
         <div className='mt-10 grid grid-cols-1 md:grid-cols-2 
         lg:grid-cols-3 gap-7'>
             {eventList.length>0?eventList?.map((event,index)=>(
-                <div className='border shadow-md 
+                <div key={index} className='border shadow-md 
                 border-t-8 rounded-lg p-5 flex flex-col gap-3'
                 style={{borderTopColor:event?.themeColor}}
                 >
@@ -90,11 +90,11 @@ function MeetingEventList() {
                     <h2 className='flex gap-2 text-sm text-primary 
                     items-center cursor-pointer'
                     onClick={()=>{
-                        onCopyClickHandler(event)
+                        onOpenClickHandler(event)
                        
                     }}
                     >
-                        <Copy className='h-4 w-4'/> Copy Link </h2>
+                        <Copy className='h-4 w-4'/> Open Link </h2>
                     </div>
                 </div>
             ))
