@@ -3,7 +3,7 @@
 import { app } from '@/config/FirebaseConfig'
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 import { getFirestore, collection, query, where, getDocs, orderBy, deleteDoc, doc, getDoc } from 'firebase/firestore'
-import { Clock, Copy, MapPin, Pen, Settings, Trash } from 'lucide-react';
+import { Clock, Calendar, MapPin, Pen, Settings, Trash } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner';
 import {
@@ -16,11 +16,11 @@ import {
 function MeetingEventList() {
     const db = getFirestore(app);
     const { user } = useKindeBrowserClient();
-    const [businessInfo,setBusinessInfo]=useState();
-    const [eventList,setEventList]=useState([]);
+    const [businessInfo, setBusinessInfo] = useState();
+    const [eventList, setEventList] = useState([]);
         useEffect(() => {
             user && getEventList();
-            user&& BusinessInfo();
+            user && BusinessInfo();
         }, [user])
     const getEventList = async () => {
         setEventList([]);
@@ -31,35 +31,35 @@ function MeetingEventList() {
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
             console.log(doc.id, " => ", doc.data());
-            setEventList(prevEvent=>[...prevEvent,doc.data()])
+            setEventList(prevEvent => [...prevEvent, doc.data()])
         });
     }
 
-    const BusinessInfo=async()=>{
-        const docRef=doc(db,'Business',user.email);
-        const docSnap=await getDoc(docRef);
+    const BusinessInfo = async () => {
+        const docRef = doc(db,'Business',user.email);
+        const docSnap = await getDoc(docRef);
         setBusinessInfo(docSnap.data());
     }
 
-    const onDeleteMeetingEvent=async(event)=>{
-      await deleteDoc(doc(db, "MeetingEvent", event?.id)).then(resp=>{
+    const onDeleteMeetingEvent = async (event) => {
+      await deleteDoc(doc(db, "MeetingEvent", event?.id)).then(resp => {
         toast('Meeting Event Deleted!');
         getEventList();
       })
     }
 
-    const onOpenClickHandler=(event)=>{
-        const meetingEventUrl=process.env.NEXT_PUBLIC_BASE_URL+'/'+businessInfo.businessName+'/'+event.id
+    const onOpenClickHandler = (event) => {
+        const meetingEventUrl = process.env.NEXT_PUBLIC_BASE_URL + '/' + businessInfo.businessName + '/' + event.id
         window.open(meetingEventUrl, '_blank');
     }
 
     return (
         <div className='mt-10 grid grid-cols-1 md:grid-cols-2 
         lg:grid-cols-3 gap-7'>
-            {eventList.length>0?eventList?.map((event,index)=>(
+            {eventList.length > 0 ? eventList?.map((event, index) => (
                 <div key={index} className='border shadow-md 
                 border-t-8 rounded-lg p-5 flex flex-col gap-3'
-                style={{borderTopColor:event?.themeColor}}
+                style={{ borderTopColor: event?.themeColor }}
                 >
                     <div className='flex justify-end'>
                         <DropdownMenu>
@@ -71,7 +71,7 @@ function MeetingEventList() {
                           
                             <DropdownMenuItem className="flex gap-2"> <Pen/> Edit</DropdownMenuItem>
                             <DropdownMenuItem className="flex gap-2"
-                            onClick={()=>onDeleteMeetingEvent(event)}
+                            onClick={() => onDeleteMeetingEvent(event)}
                             > <Trash/> Delete</DropdownMenuItem>
                          
                         </DropdownMenuContent>
@@ -87,14 +87,15 @@ function MeetingEventList() {
                     </div>
                     <hr></hr>
                     <div className='flex justify-between'>
-                    <h2 className='flex gap-2 text-sm text-primary 
-                    items-center cursor-pointer'
-                    onClick={()=>{
-                        onOpenClickHandler(event)
-                       
-                    }}
+                    <button 
+                        className='flex gap-2 text-sm text-primary 
+                        items-center cursor-pointer p-1 bg-blue-500 hover:bg-blue-700'
+                        onClick={() => {
+                            onOpenClickHandler(event)
+                        }}
                     >
-                        <Copy className='h-4 w-4'/> Open Link </h2>
+                        <Calendar className='h-4 w-4'/> Open
+                    </button>
                     </div>
                 </div>
             ))
