@@ -89,7 +89,7 @@ function MeetingEventList() {
                     <div className='flex justify-between'>
                     <button 
                         className='flex gap-2 text-sm text-primary 
-                        items-center cursor-pointer p-1 bg-blue-500 hover:bg-blue-700'
+                        items-center cursor-pointer p-2 rounded-md hover:bg-gray-200'
                         onClick={() => {
                             onOpenClickHandler(event)
                         }}
