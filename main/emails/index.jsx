@@ -92,7 +92,7 @@ export const Email = ({
                   }}
                 >
                   *Please Join meeting on above details
-                  
+                  {meetingUrl}
                 </Text>
 
               
@@ -100,7 +100,7 @@ export const Email = ({
             </Row>
             <Row style={{ ...boxInfos, paddingTop: "0" }}>
               <Column style={containerButton} colSpan={2}>
-                <Button style={button} onClick={meetingUrl}>Join Now</Button>
+                <Button style={button} >Join Now</Button>
               </Column>
             </Row>
           </Section>
