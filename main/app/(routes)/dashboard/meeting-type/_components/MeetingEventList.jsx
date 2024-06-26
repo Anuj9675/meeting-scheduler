@@ -11,24 +11,22 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-
+  } from "@/components/ui/dropdown-menu"
+  
 function MeetingEventList() {
     const db = getFirestore(app);
     const { user } = useKindeBrowserClient();
     const [businessInfo, setBusinessInfo] = useState();
     const [eventList, setEventList] = useState([]);
-
-    useEffect(() => {
-        user && getEventList();
-        user && BusinessInfo();
-    }, [user]);
-
+        useEffect(() => {
+            user && getEventList();
+            user && BusinessInfo();
+        }, [user])
     const getEventList = async () => {
         setEventList([]);
         const q = query(collection(db, "MeetingEvent"),
             where("createdBy", "==", user?.email),
-            orderBy('id', 'desc'));
+            orderBy('id','desc'));
 
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
@@ -38,16 +36,16 @@ function MeetingEventList() {
     }
 
     const BusinessInfo = async () => {
-        const docRef = doc(db, 'Business', user.email);
+        const docRef = doc(db,'Business',user.email);
         const docSnap = await getDoc(docRef);
         setBusinessInfo(docSnap.data());
     }
 
     const onDeleteMeetingEvent = async (event) => {
-        await deleteDoc(doc(db, "MeetingEvent", event?.id)).then(resp => {
-            toast('Meeting Event Deleted!');
-            getEventList();
-        })
+      await deleteDoc(doc(db, "MeetingEvent", event?.id)).then(resp => {
+        toast('Meeting Event Deleted!');
+        getEventList();
+      })
     }
 
     const onOpenClickHandler = (event) => {
@@ -56,37 +54,58 @@ function MeetingEventList() {
     }
 
     return (
-        <div className='mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7'>
+        <div className='mt-10 grid grid-cols-1 md:grid-cols-2 
+        lg:grid-cols-3 gap-7'>
             {eventList.length > 0 ? eventList?.map((event, index) => (
-                <div key={index} className='border shadow-md border-t-8 rounded-lg p-5 flex flex-col gap-3' style={{ borderTopColor: event?.themeColor }}>
+                <div key={index} className='border shadow-md 
+                border-t-8 rounded-lg p-5 flex flex-col gap-3'
+                style={{ borderTopColor: event?.themeColor }}
+                >
                     <div className='flex justify-end'>
                         <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Settings className='cursor-pointer' />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                <DropdownMenuItem className="flex gap-2" onClick={() => onDeleteMeetingEvent(event)}> <Trash /> Delete</DropdownMenuItem>
-                            </DropdownMenuContent>
+                        <DropdownMenuTrigger asChild>
+                        <Settings className='cursor-pointer'/>
+
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                        
+                            <DropdownMenuItem className="flex gap-2"
+                            onClick={() => onDeleteMeetingEvent(event)}
+                            > <Trash/> Delete</DropdownMenuItem>
+                         
+                        </DropdownMenuContent>
                         </DropdownMenu>
+
                     </div>
                     <h2 className="font-medium text-xl">
                         {event?.eventName}</h2>
                     <div className='flex justify-between'>
-                        <h2 className='flex gap-2 text-gray-500'><Clock /> {event.duration} Min </h2>
-                        <h2 className='flex gap-2 text-gray-500'><MapPin /> {event.locationType} Min </h2>
+                    <h2 className='flex gap-2 text-gray-500'><Clock/> {event.duration} Min </h2>
+                    <h2 className='flex gap-2 text-gray-500'><MapPin/> {event.locationType} Min </h2>
+                    
                     </div>
-                    <hr />
+                    <hr></hr>
                     <div className='flex justify-between'>
-                        <button className='flex gap-2 text-sm text-primary items-center cursor-pointer' onClick={() => { onOpenClickHandler(event) }}>
-                            <Calendar className='h-4 w-4' /> Open Link
-                        </button>
+                    <button 
+                        className='flex gap-2 text-sm text-primary 
+                        items-center cursor-pointer p-2 rounded-md hover:bg-gray-200'
+                        onClick={() => {
+                            onOpenClickHandler(event)
+                        }}
+                    >
+                        <Calendar className='h-4 w-4'/> Open
+                    </button>
                     </div>
                 </div>
-            )) : (
-                <div className="flex justify-center items-center h-screen">
-                    <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue-500"></div>
-                </div>
-            )}
+            ))
+                :<div
+                className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-primary motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                role="status">
+                <span
+                  className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                >Loading...</span>
+              </div>
+        }
         </div>
     )
 }
